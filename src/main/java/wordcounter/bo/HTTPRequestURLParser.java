@@ -5,7 +5,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.MalformedURLException;
 
-public class HTTPRequestURLParser {
+import wordcounter.interfaces.URLParserInterface;
+
+public class HTTPRequestURLParser implements URLParserInterface {
 
     public HTTPRequestURLParser() {
 

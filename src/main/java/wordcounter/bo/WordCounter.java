@@ -29,8 +29,8 @@ package wordcounter.bo;
 
 import java.net.MalformedURLException;
 import java.util.*;
-import org.apache.commons.lang3.StringUtils;
 
+import wordcounter.interfaces.MemoryCacheInterface;
 import wordcounter.models.CommonValues;
 
 public class WordCounter
@@ -39,8 +39,8 @@ public class WordCounter
     //TODO: replace this with a set.
     private static Set<String> keywords = new HashSet<>();
     private static final Object keywordLock = new Object();
-    private static MemoryCache<String, String> urlToResourceCache =
-            new MemoryCache<>(CommonValues.SECONDS_IN_HOUR, 2 * CommonValues.SECONDS_IN_MINUTE, 10);
+    private static MemoryCacheInterface<String, String> urlToResourceCache =
+            new HashMapMemoryCache<>(CommonValues.SECONDS_IN_HOUR, 2 * CommonValues.SECONDS_IN_MINUTE, 10);
     private static HTTPRequestURLParser httpRequestURLParser = new HTTPRequestURLParser();
 
 
@@ -106,7 +106,7 @@ public class WordCounter
 
 
         for(String keyword : keywords) {
-            int count = StringUtils.countMatches(searchString, keyword);
+            int count = countMatches(searchString, keyword);
             System.out.println(String.format("Found %d matches of keyword %s in the search string.", count, keyword));
             cumulativeCount += count;
         }
@@ -114,6 +114,18 @@ public class WordCounter
         return cumulativeCount;
     }
 
-
+    //This is a silly recreation of the Apache commons StringUtil 'countMatches' function being used to remove an import.
+    private static int countMatches(final String str, final String sub) {
+        if (str.isEmpty() || sub.isEmpty()) {
+            return 0;
+        }
+        int count = 0;
+        int idx = 0;
+        while ((idx = str.indexOf(sub, idx)) != -1) {
+            count++;
+            idx += sub.length();
+        }
+        return count;
+    }
 
 }

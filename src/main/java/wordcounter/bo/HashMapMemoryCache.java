@@ -1,19 +1,16 @@
 package wordcounter.bo;
 
-
 import java.util.ArrayList;
-import org.apache.commons.collections4.MapIterator;
-import org.apache.commons.collections4.map.LRUMap;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import wordcounter.interfaces.MemoryCacheInterface;
 import wordcounter.models.CommonValues;
 
-/*
-* Based on code from https://crunchify.com/how-to-create-a-simple-in-memory-cache-in-java-lightweight-cache/
-*/
-
-public class MemoryCache<K, T> {
+public class HashMapMemoryCache<K, T> implements MemoryCacheInterface<K, T> {
     private long timeToLive;
-    private LRUMap CacheMap;
+    private Map CacheMap;
 
     protected class CacheObject {
         public long lastAccessed = System.currentTimeMillis();
@@ -24,10 +21,10 @@ public class MemoryCache<K, T> {
         }
     }
 
-    public MemoryCache(long TimeToLive, final long TimerInterval, int maxItems) {
+    public HashMapMemoryCache(long TimeToLive, final long TimerInterval, int maxItems) {
         this.timeToLive = TimeToLive * CommonValues.MILLISECONDS_TO_SECONDS;
 
-        CacheMap = new LRUMap(maxItems);
+        CacheMap = new HashMap(maxItems);
 
         if (timeToLive > 0 && TimerInterval > 0) {
 
@@ -69,6 +66,7 @@ public class MemoryCache<K, T> {
         }
     }
 
+    @Override
     public void remove(K key) {
         synchronized (CacheMap) {
             CacheMap.remove(key);
@@ -88,20 +86,24 @@ public class MemoryCache<K, T> {
         ArrayList<K> deleteKey = null;
 
         synchronized (CacheMap) {
-            MapIterator itr = CacheMap.mapIterator();
+
+
 
             deleteKey = new ArrayList<K>((CacheMap.size() / 2) + 1);
             K key = null;
             CacheObject c = null;
 
+            Iterator itr = CacheMap.keySet().iterator();
             while (itr.hasNext()) {
                 key = (K) itr.next();
-                c = (CacheObject) itr.getValue();
+
+                c = (CacheObject) CacheMap.get(key);
 
                 if (c != null && (now > (timeToLive + c.lastAccessed))) {
                     deleteKey.add(key);
                 }
             }
+
         }
 
         for (K key : deleteKey) {
@@ -112,4 +114,5 @@ public class MemoryCache<K, T> {
             Thread.yield();
         }
     }
+
 }

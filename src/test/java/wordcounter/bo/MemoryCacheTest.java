@@ -20,7 +20,7 @@ public class MemoryCacheTest {
         // Test with TimeToLive = 200 seconds
         // TimerInterval = 500 seconds
         // maxItems = 6
-        MemoryCache<String, String> cache = new MemoryCache<String, String>(200, 500, 6);
+        LRUMemoryCache<String, String> cache = new LRUMemoryCache<String, String>(200, 500, 6);
 
         cache.put("eBay", "eBay");
         cache.put("Paypal", "Paypal");
@@ -44,7 +44,7 @@ public class MemoryCacheTest {
         // Test with TimeToLive = 1 second
         // TimerInterval = 1 second
         // maxItems = 10
-        MemoryCache<String, String> cache = new MemoryCache<String, String>(1, 1, 10);
+        LRUMemoryCache<String, String> cache = new LRUMemoryCache<String, String>(1, 1, 10);
 
         cache.put("eBay", "eBay");
         cache.put("Paypal", "Paypal");
@@ -63,7 +63,7 @@ public class MemoryCacheTest {
         // timerIntervalInSeconds = 100 seconds
         // maxItems = 500000
 
-        MemoryCache<String, String> cache = new MemoryCache<String, String>(100, 100, 500000);
+        LRUMemoryCache<String, String> cache = new LRUMemoryCache<String, String>(100, 100, 500000);
 
         for (int i = 0; i < size; i++) {
             String value = Integer.toString(i);
