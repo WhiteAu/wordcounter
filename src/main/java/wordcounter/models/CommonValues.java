@@ -1,19 +1,8 @@
 package wordcounter.models;
 
-public class CommonValues {
-    private static final int millisecondsToSeconds = 1000;
-    private static final int secondsInMinute = 60;
-    private static final int secondsInHour = 3600;
+public interface CommonValues {
+    int MILLISECONDS_TO_SECONDS = 1000;
+    int SECONDS_IN_MINUTE = 60;
+    int SECONDS_IN_HOUR = 3600;
 
-    public static int getSecondsInMinute() {
-        return secondsInMinute;
-    }
-
-    public static int getMillisecondsToSeconds() {
-        return millisecondsToSeconds;
-    }
-
-    public static int getSecondsInHour() {
-        return secondsInHour;
-    }
 }

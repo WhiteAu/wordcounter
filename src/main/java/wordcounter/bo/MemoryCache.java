@@ -25,7 +25,7 @@ public class MemoryCache<K, T> {
     }
 
     public MemoryCache(long TimeToLive, final long TimerInterval, int maxItems) {
-        this.timeToLive = TimeToLive * CommonValues.getMillisecondsToSeconds();
+        this.timeToLive = TimeToLive * CommonValues.MILLISECONDS_TO_SECONDS;
 
         CacheMap = new LRUMap(maxItems);
 
@@ -35,7 +35,7 @@ public class MemoryCache<K, T> {
                 public void run() {
                     while (true) {
                         try {
-                            Thread.sleep(TimerInterval * CommonValues.getMillisecondsToSeconds());
+                            Thread.sleep(TimerInterval * CommonValues.MILLISECONDS_TO_SECONDS);
                         } catch (InterruptedException ex) {
                         }
                         cleanup();

@@ -27,26 +27,29 @@ package wordcounter.bo;
 
 */
 
+import java.net.MalformedURLException;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
+
 import wordcounter.models.CommonValues;
 
 public class WordCounter
 
 {
     //TODO: replace this with a set.
-    private static List<String> keywords = new ArrayList<String>();
+    private static Set<String> keywords = new HashSet<>();
     private static final Object keywordLock = new Object();
     private static MemoryCache<String, String> urlToResourceCache =
-            new MemoryCache<>(CommonValues.getSecondsInHour(), 2 * CommonValues.getSecondsInMinute(), 10);
+            new MemoryCache<>(CommonValues.SECONDS_IN_HOUR, 2 * CommonValues.SECONDS_IN_MINUTE, 10);
+    private static HTTPRequestURLParser httpRequestURLParser = new HTTPRequestURLParser();
 
 
 
 
     public static void setKeywords(List<String> keywords) {
-        List<String> arrayList = new ArrayList<>(keywords);
+        Set<String> hashSet = new HashSet<>(keywords);
         synchronized (keywordLock) {
-            WordCounter.keywords = arrayList;
+            WordCounter.keywords = hashSet;
         }
     }
 
@@ -62,40 +65,43 @@ public class WordCounter
         //Since we're static, we don't know if keywords have been set.
         //TODO: refactor this to AccumulateCountInString
         if (keywords.isEmpty()) {
-            String output = new StringBuilder().append("Static Keywords Have Not Been Set! please set static keywords")
-                                        .append("to a list using setKeywords(List<String> keywords)")
-                                        .toString();
+            String output = "Static Keywords Have Not Been Set! please set static keywords to a list using setKeywords(List<String> keywords)";
             System.out.println(output);
         } else {
-            String stringURL = fetchURLAsStringFromCache(url);
-            cumulativeKeywordCount = accumulateCountInString(stringURL, keywords);
-        }
+            try {
+                String stringURL = fetchURLAsStringFromCache(url);
+                cumulativeKeywordCount = accumulateCountInString(stringURL, keywords);
+            } catch (MalformedURLException e) {
+                System.out.println(String.format("The supplied URL %s\n is not valid. Please create a valid URL.", url));
+                cumulativeKeywordCount = 0;
+            }
 
+        }
 
         return cumulativeKeywordCount;
     }
 
-    private static List<String> getCloneOfKeywords() {
-        List<String> clonedList;
+    private static Set<String> getCloneOfKeywords() {
+        Set<String> clonedList;
 
         synchronized (keywordLock) {
-            clonedList = new ArrayList<String>(WordCounter.keywords);
+            clonedList = new HashSet<>(WordCounter.keywords);
         }
 
         return clonedList;
     }
 
-    private static String fetchURLAsStringFromCache(String url) {
+    private static String fetchURLAsStringFromCache(String url) throws MalformedURLException{
         String representation = urlToResourceCache.get(url);
         if (representation == null) {
-            representation = HTTPRequestURLParser.fetchURLAsString(url);
+            representation = httpRequestURLParser.fetchURLAsString(url);
             urlToResourceCache.put(url, representation);
         }
 
         return representation;
     }
 
-    private static int accumulateCountInString(String searchString, List<String> keywords) {
+    private static int accumulateCountInString(String searchString, Set<String> keywords) {
         int cumulativeCount = 0;
 
 
