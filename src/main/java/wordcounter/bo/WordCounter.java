@@ -29,6 +29,7 @@ package wordcounter.bo;
 
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
+import wordcounter.models.CommonValues;
 
 public class WordCounter
 
@@ -36,6 +37,10 @@ public class WordCounter
     //TODO: replace this with a set.
     private static List<String> keywords = new ArrayList<String>();
     private static final Object keywordLock = new Object();
+    private static MemoryCache<String, String> urlToResourceCache =
+            new MemoryCache<>(CommonValues.getSecondsInHour(), 2 * CommonValues.getSecondsInMinute(), 10);
+
+
 
 
     public static void setKeywords(List<String> keywords) {
@@ -51,7 +56,7 @@ public class WordCounter
         int cumulativeKeywordCount = 0;
 
         //since WordCount.keywords is static, going to make a local copy at start of function
-        keywords = getSynchedCloneOfKeywords();
+        keywords = getCloneOfKeywords();
 
 
         //Since we're static, we don't know if keywords have been set.
@@ -62,7 +67,7 @@ public class WordCounter
                                         .toString();
             System.out.println(output);
         } else {
-            String stringURL = fetchURLAsString(url);
+            String stringURL = fetchURLAsStringFromCache(url);
             cumulativeKeywordCount = accumulateCountInString(stringURL, keywords);
         }
 
@@ -70,7 +75,7 @@ public class WordCounter
         return cumulativeKeywordCount;
     }
 
-    private static List<String> getSynchedCloneOfKeywords() {
+    private static List<String> getCloneOfKeywords() {
         List<String> clonedList;
 
         synchronized (keywordLock) {
@@ -80,8 +85,13 @@ public class WordCounter
         return clonedList;
     }
 
-    private static String fetchURLAsString(String url) {
-        String representation = HTTPRequestURLParser.fetchURLAsString(url);
+    private static String fetchURLAsStringFromCache(String url) {
+        String representation = urlToResourceCache.get(url);
+        if (representation == null) {
+            representation = HTTPRequestURLParser.fetchURLAsString(url);
+            urlToResourceCache.put(url, representation);
+        }
+
         return representation;
     }
 

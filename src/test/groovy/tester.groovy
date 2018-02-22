@@ -9,5 +9,6 @@ WordCounter.setKeywords(TEST_KEYWORDS)
 println(WordCounter.keywords)
 
 int count = WordCounter.getKeywordCount("https://en.wikipedia.org/wiki/Cat")
-
+int countTwo = WordCounter.getKeywordCount("https://en.wikipedia.org/wiki/Cat")
 println(count)
+println(countTwo)

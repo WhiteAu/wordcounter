@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.map.LRUMap;
 
+import wordcounter.models.CommonValues;
+
 /*
 * Based on code from https://crunchify.com/how-to-create-a-simple-in-memory-cache-in-java-lightweight-cache/
 */
@@ -23,7 +25,7 @@ public class MemoryCache<K, T> {
     }
 
     public MemoryCache(long TimeToLive, final long TimerInterval, int maxItems) {
-        this.timeToLive = TimeToLive * 1000;
+        this.timeToLive = TimeToLive * CommonValues.getMillisecondsToSeconds();
 
         CacheMap = new LRUMap(maxItems);
 
@@ -33,7 +35,7 @@ public class MemoryCache<K, T> {
                 public void run() {
                     while (true) {
                         try {
-                            Thread.sleep(TimerInterval * 1000);
+                            Thread.sleep(TimerInterval * CommonValues.getMillisecondsToSeconds());
                         } catch (InterruptedException ex) {
                         }
                         cleanup();
@@ -60,6 +62,7 @@ public class MemoryCache<K, T> {
             if (c == null)
                 return null;
             else {
+                System.out.println(String.format("A cache hit was found for %s", key.toString()));
                 c.lastAccessed = System.currentTimeMillis();
                 return c.value;
             }
