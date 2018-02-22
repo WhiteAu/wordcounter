@@ -1,4 +1,4 @@
-package models;
+package wordcounter.models;
 
 public class StringURLModel {
     String body;

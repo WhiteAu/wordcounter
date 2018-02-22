@@ -1,6 +1,4 @@
-package bo;
-
-import bo.MemoryCache;
+package wordcounter.bo;
 
 
 public class MemoryCacheTest {

@@ -4,7 +4,7 @@ Coded in Java 8.
 
 
 Open Questions for further improvement:
-Since bo.bo.WordCounter.keywords is static, it can change in the middle of a query--
+Since WordCounter.keywords is static, it can change in the middle of a query--
 this is an obvious race condition, and how it is handled can go in a number of different ways:
 1) at the top of each 'getKeywordCount call, make a local copy of keywords
 2) continuously check for next keyword at the deep for loop level when testing for substring matching against the HTML String
@@ -14,6 +14,8 @@ this is an obvious race condition, and how it is handled can go in a number of d
 
 
 replace HTTPRequest with something more sophisticated/don't reinvent wheel.
+
+Replace Caching Map with an LRU Map in apache commons (fixed size map; removes least used element first)
 
 
 

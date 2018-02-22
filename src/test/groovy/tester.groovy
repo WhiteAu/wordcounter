@@ -1,6 +1,5 @@
 import wordcounter.bo.WordCounter
 
-
 List<String> TEST_KEYWORDS = new ArrayList<String>()
 TEST_KEYWORDS.add("cats")
 TEST_KEYWORDS.add("dom")

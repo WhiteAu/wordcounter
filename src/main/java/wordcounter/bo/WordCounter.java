@@ -1,4 +1,4 @@
-package bo;
+package wordcounter.bo;
 
 /*
 
@@ -51,18 +51,16 @@ public class WordCounter
         int cumulativeKeywordCount = 0;
 
         //since WordCount.keywords is static, going to make a local copy at start of function
-
         keywords = getSynchedCloneOfKeywords();
 
 
         //Since we're static, we don't know if keywords have been set.
-        //
+        //TODO: refactor this to AccumulateCountInString
         if (keywords.isEmpty()) {
             String output = new StringBuilder().append("Static Keywords Have Not Been Set! please set static keywords")
                                         .append("to a list using setKeywords(List<String> keywords)")
                                         .toString();
             System.out.println(output);
-
         } else {
             String stringURL = fetchURLAsString(url);
             cumulativeKeywordCount = accumulateCountInString(stringURL, keywords);

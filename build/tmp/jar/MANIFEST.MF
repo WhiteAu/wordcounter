@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Implementation-Title: whiteau URL Word Counter
+Implementation-Version: 1.0-SNAPSHOT
+

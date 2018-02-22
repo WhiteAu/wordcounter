@@ -1,4 +1,4 @@
-package bo;
+package wordcounter.bo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

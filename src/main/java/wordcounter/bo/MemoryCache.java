@@ -1,9 +1,9 @@
-package bo;
+package wordcounter.bo;
 
 
 import java.util.ArrayList;
-import org.apache.commons.collections.MapIterator;
-import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections4.MapIterator;
+import org.apache.commons.collections4.map.LRUMap;
 
 /*
 * Based on code from https://crunchify.com/how-to-create-a-simple-in-memory-cache-in-java-lightweight-cache/
