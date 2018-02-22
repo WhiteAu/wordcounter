@@ -1,11 +1,11 @@
 package wordcounter.bo;
 
-
-public class MemoryCacheTest {
+/* Based on Proof of Concept tests for caching from elsewhere */
+public class LRUMemoryCacheTest {
 
     public static void main(String[] args) throws InterruptedException {
 
-        MemoryCacheTest Cache = new MemoryCacheTest();
+        LRUMemoryCacheTest Cache = new LRUMemoryCacheTest();
 
         System.out.println("\n\n==========Test1: TestAddRemoveObjects ==========");
         Cache.TestAddRemoveObjects();
