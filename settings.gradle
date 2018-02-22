@@ -1,0 +1,4 @@
+rootProject.name = 'wordcounter'
+rootProject.name = 'wordcounter'
+include 'bin'
+
